@@ -1,0 +1,777 @@
+
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sherwin's Corner - Login & Shop</title>
+  <link
+    href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+    rel="stylesheet"
+  />
+  <style>
+    /* Hide scroll when modal is open */
+    body.modal-open {
+      overflow: hidden;
+    }
+    /* Ensure focus rings are visible in dark mode */
+    .dark .focus\:ring-blue-500:focus {
+        --tw-ring-opacity: 1;
+        --tw-ring-color: rgba(59, 130, 246, var(--tw-ring-opacity)); /* blue-500 */
+    }
+  </style>
+</head>
+<body class="bg-white text-gray-900 dark:bg-gray-900 dark:text-white min-h-screen flex flex-col">
+
+  <!-- LOGIN & REGISTER PAGE -->
+  <main id="authPage" class="flex-grow flex items-center justify-center bg-gray-100 dark:bg-gray-800 p-6">
+    <div
+      class="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-md w-full p-8"
+    >
+      <h1
+        id="authTitle"
+        class="text-3xl font-bold mb-6 text-center text-gray-900 dark:text-white"
+      >
+        Login to Sherwin's Corner
+      </h1>
+
+      <form id="loginForm" class="space-y-6">
+        <div>
+          <label
+            for="loginUsername"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Username or Email</label
+          >
+          <input
+            id="loginUsername"
+            type="text"
+            required
+            class="mt-1 block w-full rounded border border-gray-300 dark:border-gray-700 px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <label
+            for="loginPassword"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Password</label
+          >
+          <input
+            id="loginPassword"
+            type="password"
+            required
+            class="mt-1 block w-full rounded border border-gray-300 dark:border-gray-700 px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded font-semibold transition-colors"
+        >
+          Login
+        </button>
+      </form>
+
+      <form id="registerForm" class="space-y-6 hidden">
+        <div>
+          <label
+            for="regUsername"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Username or Email</label
+          >
+          <input
+            id="regUsername"
+            type="text"
+            required
+            class="mt-1 block w-full rounded border border-gray-300 dark:border-gray-700 px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <label
+            for="regPassword"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Password</label
+          >
+          <input
+            id="regPassword"
+            type="password"
+            required
+            minlength="6"
+            class="mt-1 block w-full rounded border border-gray-300 dark:border-gray-700 px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <div>
+          <label
+            for="regConfirmPassword"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >Confirm Password</label
+          >
+          <input
+            id="regConfirmPassword"
+            type="password"
+            required
+            minlength="6"
+            class="mt-1 block w-full rounded border border-gray-300 dark:border-gray-700 px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded font-semibold transition-colors"
+        >
+          Register
+        </button>
+      </form>
+
+      <p class="mt-6 text-center text-sm text-gray-700 dark:text-gray-400">
+        <span id="toggleAuthText">Don't have an account? </span>
+        <button
+          id="toggleAuthBtn"
+          class="text-blue-600 dark:text-blue-400 hover:underline font-semibold"
+        >
+          Register here
+        </button>
+      </p>
+    </div>
+  </main>
+
+  <!-- MAIN SHOP PAGE (hidden until login) -->
+  <div id="shopPage" class="hidden flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <nav
+      class="flex justify-between items-center p-4 bg-gray-800 text-white shadow-md"
+    >
+      <div class="text-xl font-bold">🛍️ Sherwin's Corner</div>
+      <div class="space-x-4 hidden md:flex items-center">
+        <a href="#" class="hover:text-blue-300 transition-colors">Home</a>
+        <a href="#products" class="hover:text-blue-300 transition-colors">Products</a>
+        <button
+          id="cartBtn"
+          class="relative hover:text-blue-300 transition-colors"
+          aria-label="Open cart"
+        >
+          Cart 🛒
+          <span
+            id="cartCount"
+            class="absolute -top-2 -right-3 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+            >0</span
+          >
+        </button>
+        <button
+          id="logoutBtn"
+          class="ml-4 hover:text-red-300 transition-colors text-red-400 font-semibold"
+        >
+          Logout
+        </button>
+      </div>
+      <!-- Mobile menu icon -->
+      <button
+        id="mobileMenuToggle"
+        class="md:hidden text-2xl"
+        aria-label="Toggle mobile menu"
+      >
+        ☰
+      </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div
+      id="mobileMenu"
+      class="bg-gray-700 text-white p-4 hidden md:hidden flex-col space-y-2 absolute w-full z-40 shadow-lg"
+    >
+      <a href="#" class="block py-2 hover:bg-gray-600 rounded px-2 transition-colors">Home</a>
+      <a href="#products" class="block py-2 hover:bg-gray-600 rounded px-2 transition-colors">Products</a>
+      <button
+        id="cartBtnMobile"
+        class="relative block py-2 hover:bg-gray-600 rounded px-2 text-left w-full transition-colors"
+        aria-label="Open cart"
+      >
+        Cart 🛒
+        <span
+          id="cartCountMobile"
+          class="absolute top-0 right-0 mr-2 mt-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+          >0</span
+        >
+      </button>
+      <button
+        id="logoutBtnMobile"
+        class="block py-2 hover:bg-gray-600 rounded px-2 text-red-400 font-semibold text-left w-full transition-colors"
+      >
+        Logout
+      </button>
+    </div>
+
+    <!-- Hero Section -->
+    <section
+      class="text-center py-16 px-4 bg-gray-100 dark:bg-gray-800"
+    >
+      <h1 class="text-4xl md:text-5xl font-bold mb-3 text-gray-900 dark:text-white">One Shop. Endless Styles</h1>
+      <p class="text-lg text-gray-600 dark:text-gray-300">Outfits That Speak Louder.</p>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="flex-grow py-12 px-4 container mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-10 text-gray-900 dark:text-white">Our Products</h2>
+      <div id="productList" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+        
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-shadow bg-white dark:bg-gray-800 flex flex-col" data-name="Black T-shirt" data-price="450">
+            <img src="sherwin-tshirt.jpg" alt="T-shirt" class="w-full h-64 object-cover mb-4 rounded-lg" />
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">Classic Tee</h2>
+            <p class="text-md text-gray-700 dark:text-gray-400 mb-3">₹450</p>
+            <div class="mt-auto flex items-center space-x-2">
+              <select class="size-select w-full border rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="" disabled selected>Select Size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded add-to-cart whitespace-nowrap font-medium transition-colors">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-shadow bg-white dark:bg-gray-800 flex flex-col" data-name="MI Jersey" data-price="750">
+            <img src="sherwin-mi.jpg" alt="MI Jersey" class="w-full h-64 object-cover mb-4 rounded-lg" />
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">MI Jersey</h2>
+            <p class="text-md text-gray-700 dark:text-gray-400 mb-3">₹750</p>
+            <div class="mt-auto flex items-center space-x-2">
+              <select class="size-select w-full border rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="" disabled selected>Select Size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded add-to-cart whitespace-nowrap font-medium transition-colors">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-shadow bg-white dark:bg-gray-800 flex flex-col" data-name="Real Madrid Jersey" data-price="900">
+            <img src="sherwin-real.jpg" alt="Real Madrid Jersey" class="w-full h-64 object-cover mb-4 rounded-lg" />
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">Real Madrid Jersey</h2>
+            <p class="text-md text-gray-700 dark:text-gray-400 mb-3">₹900</p>
+            <div class="mt-auto flex items-center space-x-2">
+              <select class="size-select w-full border rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="" disabled selected>Select Size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded add-to-cart whitespace-nowrap font-medium transition-colors">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-shadow bg-white dark:bg-gray-800 flex flex-col" data-name="Oversized T-shirt" data-price="800">
+            <img src="sherwin-over.jpg" alt="Oversized T-shirt" class="w-full h-64 object-cover mb-4 rounded-lg" />
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">Oversized T-shirt</h2>
+            <p class="text-md text-gray-700 dark:text-gray-400 mb-3">₹800</p>
+            <div class="mt-auto flex items-center space-x-2">
+              <select class="size-select w-full border rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="" disabled selected>Select Size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded add-to-cart whitespace-nowrap font-medium transition-colors">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-shadow bg-white dark:bg-gray-800 flex flex-col" data-name="Nike Brooklyn" data-price="1200">
+            <img src="sherwin-nike.jpg" alt="Nike Brooklyn" class="w-full h-64 object-cover mb-4 rounded-lg" />
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">Nike Brooklyn</h2>
+            <p class="text-md text-gray-700 dark:text-gray-400 mb-3">₹1200</p>
+            <div class="mt-auto flex items-center space-x-2">
+              <select class="size-select w-full border rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="" disabled selected>Select Size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded add-to-cart whitespace-nowrap font-medium transition-colors">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-shadow bg-white dark:bg-gray-800 flex flex-col" data-name="India Jersey" data-price="1500">
+            <img src="sherwin-india.jpg" class="w-full h-64 object-cover mb-4 rounded-lg" />
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">India Jersey</h2>
+            <p class="text-md text-gray-700 dark:text-gray-400 mb-3">₹1500</p>
+            <div class="mt-auto flex items-center space-x-2">
+              <select class="size-select w-full border rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="" disabled selected>Select Size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded add-to-cart whitespace-nowrap font-medium transition-colors">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-shadow bg-white dark:bg-gray-800 flex flex-col" data-name="Puma T-Shirt" data-price="1700">
+            <img src="sherwin-puma.jpg" alt="Puma T-Shirt" class="w-full h-64 object-cover mb-4 rounded-lg" />
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">Puma T-Shirt</h2>
+            <p class="text-md text-gray-700 dark:text-gray-400 mb-3">₹1700</p>
+            <div class="mt-auto flex items-center space-x-2">
+              <select class="size-select w-full border rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="" disabled selected>Select Size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded add-to-cart whitespace-nowrap font-medium transition-colors">Add to Cart</button>
+            </div>
+        </div>
+
+        <div class="border border-gray-200 dark:border-gray-700 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-shadow bg-white dark:bg-gray-800 flex flex-col" data-name="Adidas Polo" data-price="1000">
+            <img src="sherwin-polo.jpg" alt="Adidas Polo" class="w-full h-64 object-cover mb-4 rounded-lg" />
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-1">Adidas Polo</h2>
+            <p class="text-md text-gray-700 dark:text-gray-400 mb-3">₹1000</p>
+            <div class="mt-auto flex items-center space-x-2">
+              <select class="size-select w-full border rounded px-3 py-2 text-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                <option value="" disabled selected>Select Size</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+              </select>
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded add-to-cart whitespace-nowrap font-medium transition-colors">Add to Cart</button>
+            </div>
+        </div>
+      </div>
+    </section>
+  
+    <div id="cartSidebar" class="fixed inset-0 z-50 bg-black bg-opacity-75 hidden transition-opacity duration-300">
+      <div class="absolute right-0 top-0 h-full w-full max-w-sm bg-white dark:bg-gray-800 shadow-xl p-6 flex flex-col">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white">🛒 Your Cart</h2>
+          <button id="closeCartBtn" class="text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400 text-3xl transition-colors">×</button>
+        </div>
+        <div id="cartItems" class="space-y-4 overflow-y-auto flex-1 mb-4 pr-2">
+          <!-- Cart items will be dynamically inserted here -->
+           <p class="text-gray-600 dark:text-gray-400 empty-cart-message">Your cart is empty.</p>
+        </div>
+        <div class="mt-auto border-t border-gray-200 dark:border-gray-700 pt-6">
+          <div class="flex justify-between items-center mb-4">
+            <p class="font-semibold text-lg text-gray-900 dark:text-white">Total:</p>
+            <span id="cartTotal" class="font-bold text-xl text-gray-900 dark:text-white">₹0.00</span>
+          </div>
+          <a href="checkout.html" id="checkoutBtnLink" class="checkout-btn block w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg text-center font-semibold transition-colors">
+            ✅ Checkout
+          </a>
+        </div>
+      </div>
+    </div>
+  </div> <!-- END OF shopPage -->
+
+  <!-- Footer -->
+  <footer class="text-center p-6 bg-gray-800 text-gray-300 mt-auto">
+    <p>© 2025 Sherwin's Corner. All Rights Reserved.</p>
+    <div class="space-x-4 mt-2">
+      <a href="#" class="hover:text-blue-300 transition-colors">About</a>
+      <a href="#" class="hover:text-blue-300 transition-colors">Contact</a>
+      <a href="#" class="hover:text-blue-300 transition-colors">Terms</a>
+    </div>
+  </footer>
+
+  <div id="notification" class="fixed top-5 right-5 z-[100] hidden px-6 py-3 rounded-lg shadow-lg text-white transition-all duration-500 transform translate-x-full opacity-0">
+    Item added to cart!
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Page elements
+        const authPage = document.getElementById('authPage');
+        const shopPage = document.getElementById('shopPage');
+
+        // Auth elements
+        const authTitle = document.getElementById('authTitle');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const toggleAuthBtn = document.getElementById('toggleAuthBtn');
+        const toggleAuthText = document.getElementById('toggleAuthText');
+
+        const loginUsernameInput = document.getElementById('loginUsername');
+        const loginPasswordInput = document.getElementById('loginPassword');
+
+        const regUsernameInput = document.getElementById('regUsername');
+        const regPasswordInput = document.getElementById('regPassword');
+        const regConfirmPasswordInput = document.getElementById('regConfirmPassword');
+
+        // Shop elements
+        const logoutBtn = document.getElementById('logoutBtn');
+        const logoutBtnMobile = document.getElementById('logoutBtnMobile');
+        // const productListContainer = document.getElementById('productList'); // Renamed for clarity
+        const cartBtn = document.getElementById('cartBtn');
+        const cartBtnMobile = document.getElementById('cartBtnMobile');
+        const cartCountSpan = document.getElementById('cartCount');
+        const cartCountMobileSpan = document.getElementById('cartCountMobile');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCartBtn = document.getElementById('closeCartBtn');
+        const cartItemsContainer = document.getElementById('cartItems');
+        const cartTotalSpan = document.getElementById('cartTotal');
+        const notificationDiv = document.getElementById('notification');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuToggleBtn = document.getElementById('mobileMenuToggle');
+        const checkoutBtnLink = document.getElementById('checkoutBtnLink');
+
+
+        let cart = [];
+        let currentUser = null;
+
+        // --- UTILITY FUNCTIONS ---
+        function showAuthPage() {
+            authPage.classList.remove('hidden');
+            authPage.classList.add('flex');
+            shopPage.classList.add('hidden');
+            shopPage.classList.remove('flex');
+            document.body.classList.remove('modal-open');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+        }
+
+        function showShopPage() {
+            authPage.classList.add('hidden');
+            authPage.classList.remove('flex');
+            shopPage.classList.remove('hidden');
+            shopPage.classList.add('flex');
+        }
+
+        function showNotification(message, type = 'success', duration = 3000) {
+            notificationDiv.textContent = message;
+            notificationDiv.classList.remove('hidden', 'bg-green-600', 'bg-red-600', 'translate-x-full', 'opacity-0');
+            notificationDiv.classList.add(type === 'success' ? 'bg-green-600' : 'bg-red-600');
+            
+            // Force reflow to enable transition
+            void notificationDiv.offsetWidth; 
+            notificationDiv.classList.remove('translate-x-full', 'opacity-0');
+
+
+            setTimeout(() => {
+                notificationDiv.classList.add('opacity-0');
+                 setTimeout(() => {
+                    notificationDiv.classList.add('hidden', 'translate-x-full');
+                }, 500); // Wait for opacity transition to finish
+            }, duration);
+        }
+        
+        // --- AUTH LOGIC ---
+        if (toggleAuthBtn) {
+            toggleAuthBtn.addEventListener('click', () => {
+                if (loginForm.classList.contains('hidden')) {
+                    loginForm.classList.remove('hidden');
+                    registerForm.classList.add('hidden');
+                    authTitle.textContent = "Login to Sherwin's Corner";
+                    toggleAuthText.textContent = "Don't have an account? ";
+                    toggleAuthBtn.textContent = 'Register here';
+                } else {
+                    loginForm.classList.add('hidden');
+                    registerForm.classList.remove('hidden');
+                    authTitle.textContent = "Register for Sherwin's Corner";
+                    toggleAuthText.textContent = 'Already have an account? ';
+                    toggleAuthBtn.textContent = 'Login here';
+                }
+            });
+        }
+
+        if (registerForm) {
+            registerForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const username = regUsernameInput.value.trim();
+                const password = regPasswordInput.value;
+                const confirmPassword = regConfirmPasswordInput.value;
+
+                if (!username || !password || !confirmPassword) {
+                    showNotification('All fields are required.', 'error');
+                    return;
+                }
+                if (password.length < 6) {
+                    showNotification('Password must be at least 6 characters long.', 'error');
+                    return;
+                }
+                if (password !== confirmPassword) {
+                    showNotification('Passwords do not match.', 'error');
+                    return;
+                }
+
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                if (users.find(user => user.username.toLowerCase() === username.toLowerCase())) {
+                    showNotification('Username already exists.', 'error');
+                    return;
+                }
+
+                users.push({ username, password }); // In real app, HASH password
+                localStorage.setItem('users', JSON.stringify(users));
+
+                showNotification('Registration successful! Please login.', 'success');
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                authTitle.textContent = "Login to Sherwin's Corner";
+                toggleAuthText.textContent = "Don't have an account? ";
+                toggleAuthBtn.textContent = 'Register here';
+                registerForm.reset();
+            });
+        }
+
+        if (loginForm) {
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const usernameOrEmail = loginUsernameInput.value.trim();
+                const password = loginPasswordInput.value;
+
+                if (!usernameOrEmail || !password) {
+                    showNotification('Username/Email and password are required.', 'error');
+                    return;
+                }
+
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.username.toLowerCase() === usernameOrEmail.toLowerCase() && u.password === password);
+
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    loadCartForCurrentUser();
+                    showNotification(`Welcome back, ${user.username}!`, 'success');
+                    showShopPage();
+                    loginForm.reset();
+                } else {
+                    showNotification('Invalid username/email or password.', 'error');
+                }
+            });
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            cart = [];
+            updateCartDisplay();
+            showNotification('Logged out successfully.', 'success');
+            showAuthPage();
+        }
+
+        if (logoutBtn) logoutBtn.addEventListener('click', logout);
+        if (logoutBtnMobile) logoutBtnMobile.addEventListener('click', logout);
+
+        // --- CART LOGIC ---
+        function loadCartForCurrentUser() {
+            if (currentUser) {
+                const storedCart = localStorage.getItem(`cart_${currentUser.username}`);
+                cart = storedCart ? JSON.parse(storedCart) : [];
+            } else {
+                cart = [];
+            }
+            updateCartDisplay();
+        }
+
+        function saveCartForCurrentUser() {
+            if (currentUser) {
+                localStorage.setItem(`cart_${currentUser.username}`, JSON.stringify(cart));
+            }
+        }
+
+        function updateCartDisplay() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            let itemCount = 0;
+            const emptyCartMessage = cartItemsContainer.querySelector('.empty-cart-message') || document.createElement('p');
+            emptyCartMessage.className = 'text-gray-600 dark:text-gray-400 empty-cart-message';
+            emptyCartMessage.textContent = 'Your cart is empty.';
+
+            if (cart.length === 0) {
+                cartItemsContainer.appendChild(emptyCartMessage);
+                checkoutBtnLink.classList.add('opacity-50', 'pointer-events-none');
+            } else {
+                checkoutBtnLink.classList.remove('opacity-50', 'pointer-events-none');
+                cart.forEach((item, index) => {
+                    const itemElement = document.createElement('div');
+                    itemElement.classList.add('flex', 'justify-between', 'items-center', 'p-3', 'border-b', 'border-gray-200', 'dark:border-gray-700');
+                    itemElement.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <img src="${item.image || 'https://via.placeholder.com/50'}" alt="${item.name}" class="w-12 h-12 object-cover rounded">
+                            <div>
+                                <p class="font-semibold text-gray-900 dark:text-white">${item.name} (${item.size})</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">₹${item.price.toFixed(2)}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <button data-index="${index}" class="quantity-decrease px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">-</button>
+                            <span class="w-6 text-center text-gray-900 dark:text-white">${item.quantity}</span>
+                            <button data-index="${index}" class="quantity-increase px-2 py-1 bg-gray-200 dark:bg-gray-600 rounded hover:bg-gray-300 dark:hover:bg-gray-500 transition-colors">+</button>
+                            <button data-index="${index}" class="remove-item text-red-500 hover:text-red-700 dark:hover:text-red-400 text-xl font-bold transition-colors" aria-label="Remove item">×</button>
+                        </div>
+                    `;
+                    cartItemsContainer.appendChild(itemElement);
+                    total += item.price * item.quantity;
+                    itemCount += item.quantity;
+                });
+            }
+
+            cartTotalSpan.textContent = `₹${total.toFixed(2)}`;
+            cartCountSpan.textContent = itemCount;
+            cartCountMobileSpan.textContent = itemCount;
+            
+            saveCartForCurrentUser();
+        }
+
+
+        function addToCart(name, price, size, image) {
+            if (!currentUser) {
+                showNotification('Please login to add items to cart.', 'error');
+                openCartSidebar(); // Optionally open sidebar to prompt login or show message
+                return;
+            }
+            if (!size) {
+                showNotification('Please select a size for ' + name + '.', 'error');
+                return;
+            }
+
+            const existingItemIndex = cart.findIndex(item => item.name === name && item.size === size);
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity++;
+            } else {
+                cart.push({ name, price: parseFloat(price), size, image, quantity: 1 });
+            }
+            updateCartDisplay();
+            showNotification(`${name} (${size}) added to cart!`, 'success');
+        }
+
+        if (cartItemsContainer) {
+            cartItemsContainer.addEventListener('click', (e) => {
+                const target = e.target.closest('button'); // Ensure we get the button
+                if (!target) return;
+
+                const index = parseInt(target.dataset.index);
+                if (isNaN(index) || index < 0 || index >= cart.length) return;
+
+
+                if (target.classList.contains('remove-item')) {
+                    cart.splice(index, 1);
+                } else if (target.classList.contains('quantity-decrease')) {
+                    if (cart[index].quantity > 1) {
+                        cart[index].quantity--;
+                    } else {
+                        cart.splice(index, 1); 
+                    }
+                } else if (target.classList.contains('quantity-increase')) {
+                    cart[index].quantity++;
+                }
+                updateCartDisplay();
+            });
+        }
+
+        // --- PRODUCT PAGE LOGIC ---
+        const productCards = document.querySelectorAll('#productList > div[data-name]');
+        if (productCards) {
+            productCards.forEach(card => {
+                const addToCartButton = card.querySelector('.add-to-cart');
+                const sizeSelect = card.querySelector('.size-select');
+
+                if (addToCartButton) {
+                    addToCartButton.addEventListener('click', () => {
+                        const name = card.dataset.name;
+                        const price = parseFloat(card.dataset.price);
+                        const selectedSize = sizeSelect ? sizeSelect.value : 'N/A';
+                        const imageElement = card.querySelector('img');
+                        const image = imageElement ? imageElement.src : 'https://via.placeholder.com/50';
+                        
+                        if (!selectedSize && sizeSelect && sizeSelect.options.length > 1) { // Check if size selection is actually available
+                            showNotification(`Please select a size for ${name}.`, 'error');
+                            sizeSelect.focus();
+                            return;
+                        }
+                        addToCart(name, price, selectedSize, image);
+                    });
+                }
+            });
+        }
+
+        // --- CART SIDEBAR TOGGLE ---
+        function openCartSidebar() {
+            cartSidebar.classList.remove('hidden');
+            // Animate in
+            setTimeout(() => {
+                cartSidebar.classList.remove('opacity-0');
+                cartSidebar.querySelector('.absolute').classList.remove('translate-x-full');
+            }, 10); // Small delay for transition
+            document.body.classList.add('modal-open');
+            updateCartDisplay(); // Refresh cart display when opening
+        }
+
+        function closeCartSidebar() {
+            cartSidebar.classList.add('opacity-0');
+            cartSidebar.querySelector('.absolute').classList.add('translate-x-full');
+             setTimeout(() => {
+                cartSidebar.classList.add('hidden');
+            }, 300); // Match transition duration
+            document.body.classList.remove('modal-open');
+        }
+        
+        // Initial state for sidebar (hidden with styles for animation)
+        if (cartSidebar) {
+            cartSidebar.classList.add('opacity-0', 'transition-opacity', 'duration-300', 'ease-in-out');
+            const innerCart = cartSidebar.querySelector('.absolute');
+            if (innerCart) {
+                 innerCart.classList.add('transform', 'transition-transform', 'duration-300', 'ease-in-out', 'translate-x-full');
+            }
+        }
+
+
+        if (cartBtn) cartBtn.addEventListener('click', openCartSidebar);
+        if (cartBtnMobile) {
+            cartBtnMobile.addEventListener('click', (e) => {
+                openCartSidebar();
+                if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.classList.add('hidden'); // Close mobile menu
+                }
+            });
+        }
+        if (closeCartBtn) closeCartBtn.addEventListener('click', closeCartSidebar);
+        if (cartSidebar) {
+            cartSidebar.addEventListener('click', (e) => {
+                if (e.target === cartSidebar) {
+                    closeCartSidebar();
+                }
+            });
+        }
+
+        // --- MOBILE MENU TOGGLE ---
+        if (mobileMenuToggleBtn && mobileMenu) {
+            mobileMenuToggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            mobileMenu.querySelectorAll('a, button').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.id !== 'cartBtnMobile') { // Don't close for cart button which opens sidebar
+                         mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+             // Close mobile menu if clicking outside of it
+            document.addEventListener('click', (e) => {
+                if (!mobileMenu.classList.contains('hidden') && !mobileMenu.contains(e.target) && e.target !== mobileMenuToggleBtn) {
+                    mobileMenu.classList.add('hidden');
+                }
+            });
+        }
+
+        // --- INITIALIZATION ---
+        function checkLoginStatus() {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+                loadCartForCurrentUser();
+                showShopPage();
+            } else {
+                showAuthPage();
+            }
+            updateCartDisplay(); // Ensure cart display is correct on load
+        }
+
+        checkLoginStatus();
+    });
+  </script>
+</body>
+</html>

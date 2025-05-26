@@ -1,0 +1,25 @@
+{
+  "achievements": [
+    { "title": "Built a Pharmacy Management System in Python", "year": 2025 },
+    { "title": "Built a Travel Booking System in .Net with SQl", "year": 2024 }
+  ],
+  "books": [
+    "Atomic Habits by James Clear",
+    "The Almanack of Naval Ravikant"
+  ],
+  "hobbies": [
+    "Cycling",
+    "Blogging",
+    "Reading"
+  ],
+  "testimonials": [
+    {
+      "name": "Tanmay Patil",
+      "feedback": "Sherwin is a focused and hard-working individual who always delivers high-quality work."
+    },
+    {
+      "name": "Harsh Pawar",
+      "feedback": "A great team player and problem solver. Always a pleasure working with him."
+    }
+  ]
+}

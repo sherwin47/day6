@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Checkout - Sherwin's Corner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <style>
+    /* Basic styling for focus rings in dark mode if needed */
+    .dark .focus\:ring-blue-500:focus {
+        --tw-ring-opacity: 1;
+        --tw-ring-color: rgba(59, 130, 246, var(--tw-ring-opacity));
+    }
+  </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen">
+  <div class="max-w-4xl mx-auto p-6">
+    <div class="mb-6">
+        <a href="index.html" class="text-blue-600 dark:text-blue-400 hover:underline">← Back to Shop</a>
+    </div>
+    <h1 class="text-3xl font-bold mb-8 text-center text-gray-800 dark:text-white">🧾 Secure Checkout</h1>
+
+    <!-- Contact Info -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Contact Information</h2>
+      <input id="contactName" class="w-full p-3 border dark:border-gray-600 rounded mb-3 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" type="text" placeholder="Full Name" required>
+      <input id="contactEmail" class="w-full p-3 border dark:border-gray-600 rounded mb-3 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" type="email" placeholder="Email" required>
+      <input id="contactPhone" class="w-full p-3 border dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" type="tel" placeholder="Phone Number" required>
+    </div>
+
+    <!-- Shipping Info -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Shipping Address</h2>
+      <input id="shippingAddress1" class="w-full p-3 border dark:border-gray-600 rounded mb-3 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" type="text" placeholder="Address Line 1" required>
+      <input id="shippingAddress2" class="w-full p-3 border dark:border-gray-600 rounded mb-3 bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" type="text" placeholder="Address Line 2 (Optional)">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+        <input id="shippingCity" class="p-3 border dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" type="text" placeholder="City" required>
+        <input id="shippingState" class="p-3 border dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" type="text" placeholder="State / Province" required>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <input id="shippingZip" class="p-3 border dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" type="text" placeholder="ZIP / Postal Code" required>
+        <input id="shippingCountry" class="p-3 border dark:border-gray-600 rounded bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none" type="text" placeholder="Country" required>
+      </div>
+    </div>
+
+    <!-- Delivery Method -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Delivery Method</h2>
+      <label class="block mb-2 p-3 border dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+        <input type="radio" name="shipping" class="mr-2 accent-blue-600" value="Standard" checked> Standard (Free, 5-7 days)
+      </label>
+      <label class="block p-3 border dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+        <input type="radio" name="shipping" class="mr-2 accent-blue-600" value="Express"> Express (+₹100.00, 2-3 days)
+      </label>
+    </div>
+
+    <!-- Payment Method -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Payment Method</h2>
+      <label class="block mb-2 p-3 border dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+        <input type="radio" name="payment" class="mr-2 accent-blue-600" value="Card"> Credit/Debit Card
+      </label>
+      <label class="block mb-2 p-3 border dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+        <input type="radio" name="payment" class="mr-2 accent-blue-600" value="UPI"> UPI
+      </label>
+      <label class="block p-3 border dark:border-gray-700 rounded hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+        <input type="radio" name="payment" class="mr-2 accent-blue-600" value="COD"> Cash on Delivery
+      </label>
+    </div>
+
+    <!-- Conditional Payment Details -->
+    <div id="paymentDetails" class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6 hidden">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Payment Details</h2>
+
+      <!-- UPI Section -->
+      <div id="upiSection" class="hidden text-center">
+        <p class="mb-3 text-gray-700 dark:text-gray-300">Scan the QR code below with your UPI app to pay:</p>
+        <img id="upiQR" src="" alt="UPI QR Code" class="mx-auto w-48 h-48 mb-2 border dark:border-gray-600 p-1 bg-white">
+        <p class="text-sm text-gray-600 dark:text-gray-400">The total amount will be auto-filled in your UPI app.</p>
+        <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">(UPI ID: yourupi@bank)</p>
+      </div>
+
+      <!-- Card Section -->
+      <div id="cardSection" class="hidden">
+        <p class="text-sm text-yellow-600 dark:text-yellow-400 mb-3">Note: For real transactions, never enter actual card details on a site not using a secure payment gateway (e.g., Stripe, Razorpay).</p>
+        <form class="space-y-4">
+          <input id="cardNumber" type="text" placeholder="Card Number (e.g., 1234567890123456)" maxlength="16" class="w-full border dark:border-gray-600 px-3 py-2 rounded bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <input id="cardExpiry" type="text" placeholder="MM/YY" maxlength="5" class="w-full sm:w-1/2 border dark:border-gray-600 px-3 py-2 rounded bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
+            <input id="cardCVV" type="password" placeholder="CVV (e.g., 123)" maxlength="3" class="w-full sm:w-1/2 border dark:border-gray-600 px-3 py-2 rounded bg-gray-50 dark:bg-gray-700 focus:ring-2 focus:ring-blue-500 outline-none">
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Summary and Place Order -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Order Summary</h2>
+      <div class="space-y-2 mb-4 text-gray-700 dark:text-gray-300">
+        <p class="flex justify-between">Subtotal: <span>₹<span id="subtotal">0.00</span></span></p>
+        <p class="flex justify-between">Shipping: <span>₹<span id="shipping">0.00</span></span></p>
+        <hr class="dark:border-gray-600">
+        <p class="flex justify-between font-bold text-lg">Total: <span class="text-gray-800 dark:text-white">₹<span id="total">0.00</span></span></p>
+      </div>
+      <button id="placeOrderBtn" class="mt-4 w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-semibold transition-colors duration-150 opacity-50 cursor-not-allowed" disabled>
+        ✅ Place Order
+      </button>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // --- ELEMENTS ---
+        const contactNameInput = document.getElementById("contactName");
+        const contactEmailInput = document.getElementById("contactEmail");
+        const contactPhoneInput = document.getElementById("contactPhone");
+        const shippingAddress1Input = document.getElementById("shippingAddress1");
+        const shippingCityInput = document.getElementById("shippingCity");
+        const shippingStateInput = document.getElementById("shippingState");
+        const shippingZipInput = document.getElementById("shippingZip");
+        const shippingCountryInput = document.getElementById("shippingCountry");
+
+        const subtotalEl = document.getElementById("subtotal");
+        const shippingEl = document.getElementById("shipping");
+        const totalEl = document.getElementById("total");
+        const placeOrderBtn = document.getElementById("placeOrderBtn");
+
+        const shippingRadios = document.querySelectorAll("input[name='shipping']");
+        const paymentRadios = document.querySelectorAll("input[name='payment']");
+        const paymentDetailsDiv = document.getElementById("paymentDetails");
+        const upiSection = document.getElementById("upiSection");
+        const cardSection = document.getElementById("cardSection");
+        const upiQRImg = document.getElementById("upiQR");
+        const cardNumberInput = document.getElementById("cardNumber");
+        const cardExpiryInput = document.getElementById("cardExpiry");
+        const cardCVVInput = document.getElementById("cardCVV");
+
+
+        // --- STATE ---
+        let currentUser = null;
+        let cart = [];
+        let currentSubtotal = 0;
+        let currentShippingCost = 0;
+        let currentTotal = 0;
+
+        // --- INITIALIZATION ---
+        function initializeCheckout() {
+            checkDarkMode();
+            loadCurrentUser();
+            loadCart();
+
+            if (!currentUser) { // currentUser check is primary
+                alert("You are not logged in. Please log in to proceed.");
+                window.location.href = "index.html"; // Adjust if your login page is different
+                return;
+            }
+            if (cart.length === 0) {
+                alert("Your cart is empty. Add some items to your cart before checking out.");
+                window.location.href = "index.html"; // Adjust to your shop page
+                return;
+            }
+
+            calculateInitialTotals();
+            setupEventListeners();
+            updatePlaceOrderButtonState(); // Initial state based on loaded data
+        }
+
+        function loadCurrentUser() {
+            const storedUser = localStorage.getItem('currentUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+            }
+        }
+
+        function loadCart() {
+            if (currentUser) {
+                const userCartKey = `cart_${currentUser.username}`;
+                const storedCart = localStorage.getItem(userCartKey);
+                cart = storedCart ? JSON.parse(storedCart) : [];
+            }
+        }
+
+        function calculateInitialTotals() {
+            currentSubtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const selectedShipping = document.querySelector("input[name='shipping']:checked");
+            currentShippingCost = selectedShipping && selectedShipping.value === "Express" ? 100 : 0;
+            updateTotalsDisplay();
+        }
+
+        function updateTotalsDisplay() {
+            currentTotal = currentSubtotal + currentShippingCost;
+            subtotalEl.textContent = currentSubtotal.toFixed(2);
+            shippingEl.textContent = currentShippingCost.toFixed(2);
+            totalEl.textContent = currentTotal.toFixed(2);
+            updatePlaceOrderButtonState();
+        }
+
+        // --- EVENT LISTENERS ---
+        function setupEventListeners() {
+            shippingRadios.forEach(radio => {
+                radio.addEventListener("change", handleShippingChange);
+            });
+
+            paymentRadios.forEach(radio => {
+                radio.addEventListener("change", handlePaymentMethodChange);
+            });
+
+            placeOrderBtn.addEventListener("click", handlePlaceOrder);
+
+            const allFormInputs = [
+                contactNameInput, contactEmailInput, contactPhoneInput,
+                shippingAddress1Input, shippingCityInput, shippingStateInput,
+                shippingZipInput, shippingCountryInput,
+                cardNumberInput, cardExpiryInput, cardCVVInput // Card inputs also trigger update
+            ];
+            allFormInputs.forEach(input => {
+                if(input) input.addEventListener('input', updatePlaceOrderButtonState);
+            });
+        }
+
+        function handleShippingChange(event) {
+            currentShippingCost = event.target.value === "Express" ? 100 : 0;
+            updateTotalsDisplay();
+            const selectedPayment = document.querySelector("input[name='payment']:checked");
+            if (selectedPayment && selectedPayment.value === "UPI") {
+                generateUpiQrCode();
+            }
+        }
+
+        function generateUpiQrCode() {
+            const amountForQR = currentTotal.toFixed(2);
+            if (isNaN(amountForQR) || amountForQR <= 0) {
+                console.error("Error: Total amount for QR code is invalid.");
+                upiQRImg.alt = "Error generating QR. Amount invalid.";
+                upiQRImg.src = ""; // Clear QR if amount is invalid
+                return;
+            }
+            const yourUpiId = "yourupi@bank"; // Replace with your actual UPI ID
+            upiQRImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&qzone=1&data=upi://pay?pa=${yourUpiId}&pn=SherwinCorner&am=${amountForQR}&cu=INR&tn=OrderPaymentSC${Date.now()}`;
+            upiQRImg.alt = "Scan to pay via UPI";
+        }
+
+        function handlePaymentMethodChange(event) {
+            paymentDetailsDiv.classList.remove("hidden");
+            upiSection.classList.add("hidden");
+            cardSection.classList.add("hidden");
+
+            if (event.target.value === "UPI") {
+                upiSection.classList.remove("hidden");
+                generateUpiQrCode();
+            } else if (event.target.value === "Card") {
+                cardSection.classList.remove("hidden");
+            } else { // COD or other methods
+                paymentDetailsDiv.classList.add("hidden");
+            }
+            updatePlaceOrderButtonState();
+        }
+
+        function validateForm() {
+            const requiredTextInputs = [
+                { el: contactNameInput, name: "Full Name" },
+                { el: contactEmailInput, name: "Email" },
+                { el: contactPhoneInput, name: "Phone Number" },
+                { el: shippingAddress1Input, name: "Address Line 1" },
+                { el: shippingCityInput, name: "City" },
+                { el: shippingStateInput, name: "State" },
+                { el: shippingZipInput, name: "ZIP Code" },
+                { el: shippingCountryInput, name: "Country" },
+            ];
+
+            for (const input of requiredTextInputs) {
+                if (!input.el.value.trim()) {
+                    alert(`Please fill out the "${input.name}" field.`);
+                    input.el.focus();
+                    return false;
+                }
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(contactEmailInput.value.trim())) {
+                alert("Please enter a valid email address.");
+                contactEmailInput.focus();
+                return false;
+            }
+            
+            // Basic phone validation (e.g., at least 7 digits)
+            if (!/^\d{7,}$/.test(contactPhoneInput.value.replace(/\s+/g, ''))) {
+                alert("Please enter a valid phone number (at least 7 digits).");
+                contactPhoneInput.focus();
+                return false;
+            }
+
+
+            const selectedPayment = document.querySelector("input[name='payment']:checked");
+            if (!selectedPayment) {
+                alert("Please select a payment method.");
+                // Potentially scroll to or focus the first payment radio
+                document.querySelector("input[name='payment']").focus();
+                return false;
+            }
+
+            if (selectedPayment.value === "Card") {
+                if (!cardNumberInput.value.trim() || !/^\d{13,16}$/.test(cardNumberInput.value.trim())) {
+                    alert("Please enter a valid card number (13-16 digits).");
+                    cardNumberInput.focus();
+                    return false;
+                }
+                if (!cardExpiryInput.value.trim() || !/^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiryInput.value.trim())) {
+                    alert("Please enter a valid expiry date in MM/YY format.");
+                    cardExpiryInput.focus();
+                    return false;
+                }
+                // Basic CVV validation
+                if (!cardCVVInput.value.trim() || !/^\d{3,4}$/.test(cardCVVInput.value.trim())) {
+                    alert("Please enter a valid CVV (3 or 4 digits).");
+                    cardCVVInput.focus();
+                    return false;
+                }
+            }
+            return true;
+        }
+        
+        function updatePlaceOrderButtonState() {
+            const isFormEssentiallyFilled = [
+                contactNameInput, contactEmailInput, contactPhoneInput,
+                shippingAddress1Input, shippingCityInput, shippingStateInput,
+                shippingZipInput, shippingCountryInput
+            ].every(el => el && el.value.trim() !== "");
+
+            const isPaymentSelected = !!document.querySelector("input[name='payment']:checked");
+            
+            let arePaymentDetailsValid = true;
+            const selectedPayment = document.querySelector("input[name='payment']:checked");
+            if (selectedPayment && selectedPayment.value === "Card") {
+                arePaymentDetailsValid = cardNumberInput.value.trim() !== "" && 
+                                         cardExpiryInput.value.trim() !== "" && 
+                                         cardCVVInput.value.trim() !== "";
+            }
+
+
+            if (isFormEssentiallyFilled && isPaymentSelected && arePaymentDetailsValid) {
+                placeOrderBtn.disabled = false;
+                placeOrderBtn.classList.remove("opacity-50", "cursor-not-allowed");
+            } else {
+                placeOrderBtn.disabled = true;
+                placeOrderBtn.classList.add("opacity-50", "cursor-not-allowed");
+            }
+        }
+
+        function handlePlaceOrder(event) {
+            event.preventDefault();
+            if (!validateForm()) {
+                return;
+            }
+
+            const contactInfo = {
+                fullName: contactNameInput.value.trim(),
+                email: contactEmailInput.value.trim(),
+                phone: contactPhoneInput.value.trim(),
+            };
+            const shippingAddress = {
+                address1: shippingAddress1Input.value.trim(),
+                address2: document.getElementById("shippingAddress2").value.trim(), // Optional field
+                city: shippingCityInput.value.trim(),
+                state: shippingStateInput.value.trim(),
+                zip: shippingZipInput.value.trim(),
+                country: shippingCountryInput.value.trim(),
+            };
+
+            const selectedShippingMethod = document.querySelector("input[name='shipping']:checked").value;
+            const selectedPaymentMethod = document.querySelector("input[name='payment']:checked").value;
+
+            const order = {
+                orderId: "SHW" + Date.now() + Math.floor(Math.random() * 1000),
+                items: cart,
+                contactInfo,
+                shippingAddress,
+                subtotal: currentSubtotal,
+                shippingCost: currentShippingCost,
+                total: currentTotal,
+                shippingMethod: selectedShippingMethod,
+                paymentMethod: selectedPaymentMethod,
+                orderDate: new Date().toISOString()
+            };
+
+            localStorage.setItem("latestOrder", JSON.stringify(order));
+            
+            if (currentUser) {
+                localStorage.removeItem(`cart_${currentUser.username}`);
+            }
+
+            alert("Order placed successfully! Your Order ID is: " + order.orderId + "\nYou will be redirected to the confirmation page.");
+            window.location.href = "confirmation.html"; // Ensure confirmation.html exists
+        }
+
+        // --- DARK MODE ---
+        function checkDarkMode() {
+            if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        initializeCheckout();
+    });
+  </script>
+</body>
+</html>
